@@ -1,0 +1,23 @@
+.startDeal {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.paper {
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  width: 600px;
+}
+
+.inputBase {
+  margin-left: 5px;
+  flex: 1;
+}
+
+.searchBtn {
+  padding: 10px;
+}
+
+
