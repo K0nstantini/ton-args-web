@@ -1,1 +1,1 @@
-# Bet on evertythin with TON
+# Bet on Everything with TON
