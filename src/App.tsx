@@ -15,12 +15,12 @@ function App() {
       <Header />
       <TonConnectBtn />
       <StartDeal
-        visibilityNewDeal={!newDeal}
+        showNewDeal={!newDeal}
         findDeal={a => setFindDeal(a)}
         newDeal={() => setNewDeal(true)}
       />
       {newDeal && <NewDeal
-        closeDeal={() => setNewDeal(false)}
+        close={() => setNewDeal(false)}
       />}
     </div>
   );

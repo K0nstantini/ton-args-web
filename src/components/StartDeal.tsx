@@ -5,12 +5,12 @@ import styles from '../css/StartDeal.module.css'
 import { Address } from "@ton/ton";
 
 type Props = {
-  visibilityNewDeal: boolean,
+  showNewDeal: boolean,
   findDeal: (addr: Address) => void,
   newDeal: () => void,
 }
 
-export function StartDeal({ visibilityNewDeal, findDeal, newDeal: createDeal }: Props) {
+export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props) {
   const [searchValue, setSearchValue] = useState('');
   const [address, setAddress] = useState<null | Address>();
 
@@ -45,7 +45,7 @@ export function StartDeal({ visibilityNewDeal, findDeal, newDeal: createDeal }: 
           <SearchIcon />
         </IconButton>
       </Paper>
-      {visibilityNewDeal && <Button
+      {showNewDeal && <Button
         variant="outlined"
         onClick={createDeal} >
         New deal

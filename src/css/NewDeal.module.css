@@ -1,16 +1,18 @@
 .paper {
+  position: relative;
   padding: 16px;
-  /* display: inline-block; */
   display: inline-flex;
   flex-direction: column;
   margin-top: 16px;
   gap: 16px;
   margin-left: 32px;
-  /* box-sizing: border-box; */
 }
 
-.newDeal {
-
+.close {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: fit-content;
 }
 
 .header {

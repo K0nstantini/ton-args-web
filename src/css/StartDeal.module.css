@@ -1,7 +1,7 @@
 .startDeal {
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: 8px;
   margin-left: 32px;
 }
 
@@ -9,7 +9,7 @@
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  width: 600px;
+  width: 630px;
 }
 
 .inputBase {
