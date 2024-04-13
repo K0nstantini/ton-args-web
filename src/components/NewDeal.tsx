@@ -1,7 +1,7 @@
 import { Button, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from '../css/NewDeal.module.css'
-import { Address, Sender } from "@ton/ton";
+import { Address } from "@ton/ton";
 import { NumberField } from "./NumberField";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useMain } from "../hooks/useMain";
@@ -83,6 +83,7 @@ export function NewDeal({ close }: Props) {
         <NumberField
           className={styles.fee}
           label="Arbiter Fee, %"
+          error={fee > MAX_FEE}
           onChange={setFee} />
       </div>
       <Button

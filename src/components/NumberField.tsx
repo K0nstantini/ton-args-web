@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 type Props = {
   label: string,
   onChange: (value: number) => void,
+  error?: boolean,
   className?: string,
 }
 
-export function NumberField({ label, onChange, className }: Props) {
+export function NumberField({ label, onChange, error, className }: Props) {
   const [value, setValue] = useState('0');
 
   const changeValue = (v: string) => {
@@ -29,6 +30,7 @@ export function NumberField({ label, onChange, className }: Props) {
       label={label}
       variant="outlined"
       value={value}
+      error={error ? error : false}
       inputProps={{ style: { textAlign: 'right' } }}
       onChange={e => changeValue(e.target.value)} />
   );

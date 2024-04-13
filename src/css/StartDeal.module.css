@@ -5,20 +5,7 @@
   margin-left: 32px;
 }
 
-.paper {
-  padding: 2px 4px;
-  display: flex;
-  align-items: center;
+.search {
   width: 630px;
 }
-
-.inputBase {
-  margin-left: 5px;
-  flex: 1;
-}
-
-.searchBtn {
-  padding: 10px;
-}
-
 
