@@ -5,8 +5,10 @@ import { StartDeal } from './components/StartDeal';
 import { Address } from '@ton/core';
 import { useState } from 'react';
 import { NewDeal } from './components/NewDeal';
+import { useTonConnect } from './hooks/useTonConnect';
 
 function App() {
+  const { sender, connected } = useTonConnect();
   const [newDeal, setNewDeal] = useState(false);
   const [findDeal, setFindDeal] = useState<Address | null>();
 

@@ -1,11 +1,13 @@
 import { Button, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from '../css/NewDeal.module.css'
-import { Address } from "@ton/ton";
+import { Address, Sender } from "@ton/ton";
 import { NumberField } from "./NumberField";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useMain } from "../hooks/useMain";
+import { useTonConnect } from "../hooks/useTonConnect";
 
-const MIN_TON_AMOUNT = 1;
+const MIN_TON_AMOUNT = 0.1;
 const MAX_FEE = 100; // TODO: fix
 
 type Props = {
@@ -13,14 +15,15 @@ type Props = {
 }
 
 export function NewDeal({ close }: Props) {
+  const { sender, connected } = useTonConnect();
   const [addrValue, setAddrValue] = useState('');
   const [address, setAddress] = useState<null | Address>();
   const [amount, setAmount] = useState(MIN_TON_AMOUNT);
   const [fee, setFee] = useState(0);
-
   const [invalidAddress, setInvalidAddress] = useState(false);
   const [canCreate, setCanCreate] = useState(false);
-
+  const [newDeal, setNewDeal] = useState(false);
+  const mainContract = useMain(newDeal);
 
   useEffect(() => {
     try {
@@ -35,11 +38,18 @@ export function NewDeal({ close }: Props) {
   }, [addrValue, address]);
 
   useEffect(() => {
-    setCanCreate(address != null && amount >= MIN_TON_AMOUNT && fee >= 0 && fee <= MAX_FEE)
-  }, [address, amount, fee]);
+    setCanCreate(!newDeal && address != null && amount >= MIN_TON_AMOUNT && fee >= 0 && fee <= MAX_FEE)
+  }, [address, amount, fee, newDeal]);
 
-  const newDeal = () => {
-  }
+  useEffect(() => {
+    if (!newDeal || !mainContract || !address) return;
+    setNewDeal(false);
+    if (connected) {
+      mainContract.sendNewDeal(sender, address, amount, fee);
+    } else {
+      alert("Wallet not connected");
+    }
+  }, [mainContract, newDeal]);
 
   return (
     <Paper
@@ -79,7 +89,7 @@ export function NewDeal({ close }: Props) {
         className={styles.create}
         variant="outlined"
         disabled={!canCreate}
-        onClick={newDeal}>
+        onClick={() => setNewDeal(true)}>
         Create
       </Button>
     </Paper>
