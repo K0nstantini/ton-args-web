@@ -3,24 +3,25 @@ import { Header } from './components/Header';
 import { TonConnectBtn } from './components/TonConnect';
 import { StartDeal } from './components/StartDeal';
 import { Address } from '@ton/core';
+import { useState } from 'react';
+import { NewDeal } from './components/NewDeal';
 
 function App() {
-
-
-  const findDeal = (addr: Address) => {
-  };
-
-  const newDeal = () => {
-  };
+  const [newDeal, setNewDeal] = useState(false);
+  const [findDeal, setFindDeal] = useState<Address | null>();
 
   return (
     <div>
       <Header />
       <TonConnectBtn />
       <StartDeal
-        findDeal={findDeal}
-        newDeal={newDeal}
+        visibilityNewDeal={!newDeal}
+        findDeal={a => setFindDeal(a)}
+        newDeal={() => setNewDeal(true)}
       />
+      {newDeal && <NewDeal
+        closeDeal={() => setNewDeal(false)}
+      />}
     </div>
   );
 }

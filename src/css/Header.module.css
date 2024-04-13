@@ -1,6 +1,14 @@
 .header {
-	color: darkblue;
-	text-shadow: "2px 2px 4px rgba(179, 147, 211, 0.2)";
+	/* color: darkblue; */
+	/* text-shadow: "2px 2px 4px rgba(179, 147, 211, 0.2)"; */
   padding: 20px;
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+}
+
+.tonLabel {
+  color: rgb(46, 163, 213);
+  font-weight: 600;
 }

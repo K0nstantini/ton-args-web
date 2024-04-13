@@ -1,0 +1,41 @@
+.paper {
+  padding: 16px;
+  /* display: inline-block; */
+  display: inline-flex;
+  flex-direction: column;
+  margin-top: 16px;
+  gap: 16px;
+  margin-left: 32px;
+  /* box-sizing: border-box; */
+}
+
+.newDeal {
+
+}
+
+.header {
+}
+
+.amountAndFee {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.address {
+  width: 600px;
+}
+
+.amount {
+  width: 400px;
+}
+
+.fee {
+  width: 192px;
+  margin-left: 16px;
+}
+
+.create {
+  width: 600px;
+}
+
