@@ -7,6 +7,7 @@ import { useMain } from "../hooks/useMain";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { CloseBtn } from "./buttons/CloseBtn";
+import { isCurrentUser } from "../Utils";
 
 const MIN_TON_AMOUNT = 0.1;
 const MAX_FEE = 100; // TODO: fix
@@ -43,7 +44,7 @@ export function NewDeal({ close }: Props) {
 
   useEffect(() => {
     if (!address) return;
-    setIncorrectAddress(addrValue.length > 0 && Address.normalize(connectedAddress) == Address.normalize(address));
+    setIncorrectAddress(addrValue.length > 0 && isCurrentUser(address, connectedAddress));
   }, [addrValue, address, connectedAddress]);
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { CloseBtn } from "./buttons/CloseBtn";
 import { RefreshBtn } from "./buttons/RefreshBtn";
+import { isCurrentUser } from "../Utils";
 
 type Props = {
   deal: OpenedContract<Deal>,
@@ -180,12 +181,4 @@ const PlainText: React.FC<TProps> = ({ text }) => {
     <Typography> {text} </Typography>
   );
 };
-
-function isCurrentUser(addr: Address, conAddr: string) {
-  try {
-    return Address.normalize(addr) == Address.normalize(Address.parse(conAddr));
-  } catch {
-    return false;
-  }
-}
 
