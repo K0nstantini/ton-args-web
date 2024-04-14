@@ -1,12 +1,12 @@
-import { Button, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from '../css/NewDeal.module.css'
 import { Address } from "@ton/ton";
 import { NumberField } from "./NumberField";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useMain } from "../hooks/useMain";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
+import { CloseBtn } from "./buttons/CloseBtn";
 
 const MIN_TON_AMOUNT = 0.1;
 const MAX_FEE = 100; // TODO: fix
@@ -65,11 +65,7 @@ export function NewDeal({ close }: Props) {
       className={styles.paper}
       elevation={3}>
       <div className={styles.close}>
-        <IconButton
-          aria-label="close"
-          onClick={close}>
-          <CloseOutlinedIcon />
-        </IconButton>
+        <CloseBtn onClick={close}></CloseBtn>
       </div>
       <Typography
         className={styles.header}
@@ -97,14 +93,14 @@ export function NewDeal({ close }: Props) {
           onChange={setFee} />
       </div>
       {connected
-      ? <Button
-        className={styles.create}
-        variant="outlined"
-        disabled={!canCreate}
-        onClick={() => setNewDeal(true)}>
-        Create
-      </Button>
-      : <Typography className={styles.noConnection}>Connect to action</Typography>}
+        ? <Button
+          className={styles.create}
+          variant="outlined"
+          disabled={!canCreate}
+          onClick={() => setNewDeal(true)}>
+          Create
+        </Button>
+        : <Typography className={styles.noConnection}>Connect to action</Typography>}
     </Paper>
 
   );

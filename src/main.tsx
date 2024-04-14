@@ -19,7 +19,7 @@ const theme = createTheme({
 });
 
 // this manifest is used temporarily for development purposes
-const manifestUrl = 'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json';
+const manifestUrl = 'https://K0nstantini.github.io/ton-args-web/tonconnect-manifest.json';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 <ThemeProvider theme={theme}>

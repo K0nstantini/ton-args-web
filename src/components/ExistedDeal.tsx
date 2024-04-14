@@ -3,7 +3,7 @@ import styles from '../css/ExistedDeal.module.css'
 import { NumberField } from "./NumberField";
 import { Address, OpenedContract } from "@ton/core";
 import Deal, { DealInfo, DealUser } from "../contracts/deal";
-import { Button, Checkbox, FormControlLabel, FormHelperText, IconButton, Paper, SvgIcon, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { Button, FormControlLabel, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { CloseBtn } from "./buttons/CloseBtn";
@@ -63,7 +63,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
       className={styles.paper}
       elevation={3}>
       <div className={styles.refreshClose}>
-        <RefreshBtn onClick={close}></RefreshBtn>
+        <RefreshBtn onClick={refresh}></RefreshBtn>
         <CloseBtn onClick={close}></CloseBtn>
       </div>
       <div className={styles.addr}>

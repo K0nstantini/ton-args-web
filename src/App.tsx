@@ -5,12 +5,10 @@ import { StartDeal } from './components/StartDeal';
 import { OpenedContract } from '@ton/core';
 import { useEffect, useState } from 'react';
 import { NewDeal } from './components/NewDeal';
-import { useTonConnect } from './hooks/useTonConnect';
 import { ExistedDeal } from './components/ExistedDeal';
 import Deal, { DealInfo } from './contracts/deal';
 
 function App() {
-  const { sender, connected } = useTonConnect();
   const [newDeal, setNewDeal] = useState(false);
   const [findDeal, setFindDeal] = useState<[OpenedContract<Deal>, DealInfo] | null>(null);
 

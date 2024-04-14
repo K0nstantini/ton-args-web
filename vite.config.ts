@@ -24,4 +24,5 @@ export default defineConfig({
       protocolImports: true,
     }),
   ],
+  base: '/ton-args-web/',
 });

@@ -47,10 +47,3 @@
   color: gray;
 }
 
-.notAccessible {
-  font-style: italic;
-  color: gray;
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 16px;
-}
