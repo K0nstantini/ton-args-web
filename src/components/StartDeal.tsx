@@ -1,4 +1,4 @@
-import { Button, InputAdornment, TextField } from "@mui/material";
+import { Button, InputAdornment, Paper, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import styles from '../css/StartDeal.module.css'
@@ -58,7 +58,9 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   };
 
   return (
-    <div className={styles.startDeal}>
+    <Paper
+      className={styles.paper}
+      elevation={3}>
       <TextField
         className={styles.search}
         variant="outlined"
@@ -87,7 +89,7 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
       </Button>
       }
 
-    </div>
+    </Paper>
 
   );
 };

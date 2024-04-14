@@ -1,11 +1,14 @@
-.startDeal {
-  display: flex;
+.paper {
+  position: relative;
+  padding: 16px;
+  display: inline-flex;
   flex-direction: row;
-  gap: 8px;
+  margin-top: 16px;
+  gap: 16px;
   margin-left: 32px;
 }
 
 .search {
-  width: 630px;
+  width: 600px;
 }
 

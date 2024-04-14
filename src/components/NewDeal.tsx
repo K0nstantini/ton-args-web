@@ -87,7 +87,8 @@ export function NewDeal({ close }: Props) {
       <div className={styles.amountAndFee} >
         <NumberField
           className={styles.amount}
-          label="Amount, TON"
+          label="Amount"
+          tonIcon
           onChange={setAmount} />
         <NumberField
           className={styles.fee}

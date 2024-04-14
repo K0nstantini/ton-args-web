@@ -4,9 +4,10 @@ import { NumberField } from "./NumberField";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Address, OpenedContract, address } from "@ton/core";
 import Deal, { DealInfo, DealUser } from "../contracts/deal";
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, FormHelperText, IconButton, Paper, SvgIcon, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
+import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 
 type Props = {
   deal: OpenedContract<Deal>,
@@ -17,7 +18,6 @@ type Props = {
 export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const { sender, connected } = useTonConnect();
   const connectedAddress = useTonAddress();
-  const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 
   const [info, setInfo] = useState(dealInfo);
   const [users, setUsers] = useState(dealInfo.users.map(u => new UserInfo(u, connectedAddress)));
@@ -25,35 +25,40 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const [isArbiter, setIsArbiter] = useState(false);
   const [status, setStatus] = useState('');
   const [amount, setAmount] = useState(0);
+  const [approve, setApprove] = useState(info.users.length > 1);
 
   useEffect(() => {
     setStatus(info.draw ? 'Draw. You can take your money back' : (info.approved ? 'Awaiting results' : 'Active'));
   }, [info]);
 
   useEffect(() => {
-    setIsArbiter(Address.normalize(info.arbiter) == Address.normalize(Address.parse(connectedAddress)));
-    setUsers(dealInfo.users.map(u => new UserInfo(u, connectedAddress)));
+    setIsArbiter(isCurrentUser(info.arbiter, connectedAddress));
+    setUsers(info.users.map(u => new UserInfo(u, connectedAddress)));
   }, [connectedAddress, info]);
 
   useEffect(() => {
     setUser(users.find(u => u.connected) || null);
   }, [users]);
 
-  useEffect(() => {
-    async function getData() {
-      const info = await deal.getInfo();
-      if (info) setInfo(info);
-      await sleep(5000);
-      getData();
-    }
-    getData();
-  }, [deal]);
+  const refresh = async () => {
+    const info = await deal.getInfo();
+    if (info) setInfo(info);
+  };
+
+  const addAmount = async () => {
+    await deal.sendAdd(sender, amount, approve);
+  };
 
   return (
     <Paper
       className={styles.paper}
       elevation={3}>
-      <div className={styles.close}>
+      <div className={styles.refreshClose}>
+        <IconButton
+          aria-label="refresh"
+          onClick={refresh}>
+          <RefreshOutlinedIcon />
+        </IconButton>
         <IconButton
           aria-label="close"
           onClick={close}>
@@ -97,24 +102,33 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                 <TableCell component="th" scope="row"><PlainText text={row.status} /></TableCell>
                 <TableCell align="right"><PlainText text={row.amount} /></TableCell>
-                <TableCell ><PlainText text={row.address} /></TableCell>
+                <TableCell ><PlainText text={row.address} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {connected && !isArbiter && (!user || !user.refused) &&
+      {connected && !isArbiter && !info.approved && (!user || !user.refused) &&
         <div className={styles.joinAdd}>
-          <div>
+          <div className={styles.amountApprove}>
             <NumberField
-              label="Amount, TON"
+              className={styles.amount}
+              label="Amount"
+              tonIcon
               onChange={setAmount} />
+            {(!user || !user.approved) && info.users.length > 1 && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
+              <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
+            </Tooltip>
+            }
           </div>
           <Button
-            variant="outlined" >
+            disabled={amount <= 0}
+            variant="outlined"
+            onClick={addAmount}>
             {user ? 'Add' : 'Join'}
           </Button>
-          {user && !user.approved && <Button
+          {user && !user.approved && info.users.length > 1 && <Button
             variant="outlined"
             color="success" >
             Approve
@@ -148,7 +162,7 @@ class UserInfo {
     this.approved = info.approved;
     this.refused = info.refused;
     this.status = info.refused ? 'refused' : (info.approved ? 'approved' : 'active');
-    this.connected = Address.normalize(info.address) === Address.normalize(Address.parse(conAddr));
+    this.connected = isCurrentUser(info.address,conAddr);
   }
 }
 
@@ -168,3 +182,12 @@ const PlainText: React.FC<TProps> = ({ text }) => {
     <Typography> {text} </Typography>
   );
 };
+
+function isCurrentUser(addr: Address, conAddr: string) {
+  try {
+    return Address.normalize(addr) == Address.normalize(Address.parse(conAddr));
+  } catch {
+    return false;
+  }
+}
+

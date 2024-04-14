@@ -1,4 +1,4 @@
-import { Contract, Address, Cell, ContractProvider, Dictionary } from "@ton/core";
+import { Contract, Address, Cell, ContractProvider, Dictionary, Sender, beginCell } from "@ton/core";
 
 export default class Deal implements Contract {
   constructor(readonly address: Address, readonly init?: { code: Cell, data: Cell }) { }
@@ -40,6 +40,18 @@ export default class Deal implements Contract {
     }
   }
 
+  async sendAdd(provider: ContractProvider, via: Sender, amount: number, approve: boolean) {
+		const messageBody = beginCell()
+			.storeUint(2719220571, 32)
+			.storeCoins(amount * 1_000_000_000) // TODO: fix
+			.storeBit(approve)
+			.endCell();
+
+		await provider.internal(via, {
+			value: (amount + 0.1).toFixed(3).toString(),
+			body: messageBody
+		});
+	}
 }
 
 export interface DealInfo {

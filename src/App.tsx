@@ -27,7 +27,7 @@ function App() {
   }, [findDeal]);
 
   return (
-    <div>
+    <div className="app">
       <Header />
       <TonConnectBtn />
       <StartDeal

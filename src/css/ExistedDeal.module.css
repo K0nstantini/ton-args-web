@@ -6,9 +6,10 @@
   margin-top: 16px;
   gap: 16px;
   margin-left: 32px;
+  width: 748px;
 }
 
-.close {
+.refreshClose {
   position: absolute;
   top: 8px;
   right: 16px;
@@ -20,7 +21,6 @@
   flex-direction: row;
   gap: 8px;
   align-items: baseline;
-  width: 700px;
 }
 
 .header {
@@ -37,5 +37,15 @@
   display: inline-flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.amountApprove {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.amount {
+  flex-grow: 1;
 }
 
