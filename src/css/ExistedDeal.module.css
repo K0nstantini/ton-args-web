@@ -1,0 +1,41 @@
+.paper {
+  position: relative;
+  padding: 16px;
+  display: inline-flex;
+  flex-direction: column;
+  margin-top: 16px;
+  gap: 16px;
+  margin-left: 32px;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: fit-content;
+}
+
+.addr {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: baseline;
+  width: 700px;
+}
+
+.header {
+  width: 120px;
+}
+
+.noConnection {
+  text-align: right;
+  font-style: italic;
+  color: gray;
+}
+
+.joinAdd {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+

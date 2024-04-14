@@ -3,6 +3,11 @@ import App from './App';
 import './index.css';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 // this manifest is used temporarily for development purposes
 const manifestUrl = 'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json';
 

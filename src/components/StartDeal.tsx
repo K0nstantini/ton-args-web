@@ -4,12 +4,12 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 import styles from '../css/StartDeal.module.css'
 import { Address, OpenedContract } from "@ton/ton";
 import { useAsyncInitialize } from "../hooks/useAsyncInitialize";
-import Deal from "../contracts/deal";
+import Deal, { DealInfo } from "../contracts/deal";
 import { useTonClient } from "../hooks/useTonClient";
 
 type Props = {
   showNewDeal: boolean,
-  findDeal: (addr: Address) => void,
+  findDeal: (contract: OpenedContract<Deal>, info: DealInfo) => void,
   newDeal: () => void,
 }
 
@@ -18,7 +18,8 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   const [searchValue, setSearchValue] = useState('');
   const [address, setAddress] = useState<null | Address>();
   const [invalidAddress, setInvalidAddress] = useState(false);
-  const [isDeal, setIsDeal] = useState(false);
+  // const [isDeal, setIsDeal] = useState(false);
+  const [dealInfo, setDealInfo] = useState<DealInfo | null>(null);
 
   const dealContract = useAsyncInitialize(async () => {
     if (!client || !address) return;
@@ -27,6 +28,7 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   }, [client, address]);
 
   useEffect(() => {
+    // setIsDeal(false);
     try {
       setAddress(Address.parse(searchValue));
     } catch {
@@ -39,19 +41,20 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   }, [searchValue, address]);
 
   useEffect(() => {
-    setIsDeal(false);
     async function getData() {
       if (!dealContract) return;
       const info = await dealContract.getInfo();
-      setIsDeal(info != null);
+      setDealInfo(info);
+      // setIsDeal(!(!address || !info));
     }
     getData();
   }, [dealContract]);
 
 
   const searchClick = () => {
-    if (!address) return;
-    findDeal(address);
+    if (!dealContract || !dealInfo) return;
+    setSearchValue('');
+    findDeal(dealContract, dealInfo);
   };
 
   return (
@@ -62,12 +65,13 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
         placeholder="Find Deal"
         error={invalidAddress}
         label={invalidAddress ? 'Invalid address' : ''}
+        value={searchValue}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end" >
               <Button
                 variant="outlined"
-                disabled={!isDeal}
+                disabled={!dealInfo || !address}
                 onClick={searchClick}>
                 <ArrowForwardIosOutlinedIcon />
               </Button>
