@@ -30,19 +30,21 @@ function App() {
     <div className="app">
       <Header />
       <TonConnectBtn />
-      <StartDeal
-        showNewDeal={!newDeal}
-        findDeal={(c, i) => setFindDeal([c, i])}
-        newDeal={() => setNewDeal(true)}
-      />
-      {newDeal && <NewDeal
-        close={() => setNewDeal(false)}
-      />}
-      {findDeal && <ExistedDeal
-        deal={findDeal[0]}
-        dealInfo={findDeal[1]}
-        close={() => setFindDeal(null)}
-      />}
+      <div className="body">
+        <StartDeal
+          showNewDeal={!newDeal}
+          findDeal={(c, i) => setFindDeal([c, i])}
+          newDeal={() => setNewDeal(true)}
+        />
+        {newDeal && <NewDeal
+          close={() => setNewDeal(false)}
+        />}
+        {findDeal && <ExistedDeal
+          deal={findDeal[0]}
+          dealInfo={findDeal[1]}
+          close={() => setFindDeal(null)}
+        />}
+      </div>
     </div>
   );
 }

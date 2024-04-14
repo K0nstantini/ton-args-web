@@ -41,3 +41,16 @@
   width: 600px;
 }
 
+.noConnection {
+  text-align: right;
+  font-style: italic;
+  color: gray;
+}
+
+.notAccessible {
+  font-style: italic;
+  color: gray;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 16px;
+}

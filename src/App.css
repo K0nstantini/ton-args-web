@@ -2,19 +2,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /* margin-left: 5px; */
-  /* margin-right: 5px; */
 }
-
-/* body { */
-/*   font-family: "Segoe UI", sans-serif; */
-/*   line-height: 1.4; */
-/*   color: #000; */
-/*   background: #fff; */
-/*   height: 100vh; */
-/*   font-weight: 400; */
-/* } */
 
 body {
   background-color: #F7F9FB;
 }
+
+.body {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+

@@ -96,13 +96,15 @@ export function NewDeal({ close }: Props) {
           error={fee > MAX_FEE}
           onChange={setFee} />
       </div>
-      <Button
+      {connected
+      ? <Button
         className={styles.create}
         variant="outlined"
         disabled={!canCreate}
         onClick={() => setNewDeal(true)}>
         Create
       </Button>
+      : <Typography className={styles.noConnection}>Connect to action</Typography>}
     </Paper>
 
   );

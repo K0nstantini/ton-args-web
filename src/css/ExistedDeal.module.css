@@ -1,12 +1,18 @@
 .paper {
   position: relative;
   padding: 16px;
+  margin-top: 16px;
   display: inline-flex;
   flex-direction: column;
-  margin-top: 16px;
-  gap: 16px;
   margin-left: 32px;
+  gap: 16px;
   width: 748px;
+}
+
+.data {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .refreshClose {
@@ -27,12 +33,6 @@
   width: 120px;
 }
 
-.noConnection {
-  text-align: right;
-  font-style: italic;
-  color: gray;
-}
-
 .joinAdd {
   display: inline-flex;
   flex-direction: column;
@@ -47,5 +47,19 @@
 
 .amount {
   flex-grow: 1;
+}
+
+.noConnection {
+  text-align: right;
+  font-style: italic;
+  color: gray;
+}
+
+.notAccessible {
+  font-style: italic;
+  color: gray;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 16px;
 }
 
