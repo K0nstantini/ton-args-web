@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from '../css/ExistedDeal.module.css'
 import { NumberField } from "./NumberField";
-import { Address, OpenedContract } from "@ton/core";
+import { OpenedContract } from "@ton/core";
 import Deal, { DealInfo, DealUser } from "../contracts/deal";
 import { Button, FormControlLabel, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import { useTonConnect } from "../hooks/useTonConnect";
