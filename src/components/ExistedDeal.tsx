@@ -134,12 +134,13 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
               </Button>
               {user && !user.approved && info.users.length > 1 && <Button
                 variant="outlined"
-                color="success" >
+                color="success">
                 Approve
               </Button>
               }
               {user && !user.refused && <Button
                 variant="outlined"
+                color="warning"
                 onClick={withdraw}>
                 Withdraw
               </Button>
