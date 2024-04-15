@@ -2,11 +2,11 @@
   position: relative;
   padding: 16px;
   margin-top: 16px;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   margin-left: 32px;
   gap: 16px;
-  width: 748px;
+  width: 750px;
 }
 
 .data {
@@ -31,6 +31,23 @@
 
 .header {
   width: 120px;
+}
+
+.statusAndFee {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fees {
+  padding: 8px;
+  width: 160px;
+}
+
+.fee {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .joinAdd {

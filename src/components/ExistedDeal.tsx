@@ -77,17 +77,21 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
             <Typography className={styles.header} variant="h6" > Arbiter: </Typography>
             <Typography> {info.arbiter.toString()} </Typography>
           </div>
-          <div className={styles.addr}>
-            <Typography className={styles.header} variant="h6" > Status: </Typography>
-            <Typography> {status} </Typography>
-          </div>
-          <div className={styles.addr}>
-            <Typography className={styles.header} variant="h6" > Arbiter fee: </Typography>
-            <Typography> {info.arbiterFee} %</Typography>
-          </div>
-          <div className={styles.addr}>
-            <Typography className={styles.header} variant="h6" > Contract fee: </Typography>
-            <Typography> {info.mainFee} %</Typography>
+          <div className={styles.statusAndFee}>
+            <div className={styles.addr}>
+              <Typography className={styles.header} variant="h6" > Status: </Typography>
+              <Typography> {status} </Typography>
+            </div>
+            <Paper className={styles.fees}>
+              <div className={styles.fee}>
+                <Typography variant="subtitle2">Arbiter fee</Typography>
+                <Typography variant="body2"> {info.arbiterFee} %</Typography>
+              </div>
+              <div className={styles.fee}>
+                <Typography  variant="subtitle2">Contract fee</Typography>
+                <Typography variant="body2"> {info.mainFee} %</Typography>
+              </div>
+            </Paper>
           </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -102,7 +106,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
                 {users.map((row) => (
                   <TableRow
                     key={row.address}
-                    selected={user != null}
+                    selected={row.connected}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                     <TableCell component="th" scope="row"><PlainText text={row.status} /></TableCell>
                     <TableCell align="right"><PlainText text={row.amount} /></TableCell>
@@ -121,7 +125,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
                   label="Amount"
                   tonIcon
                   onChange={setAmount} />
-                { (!user || (!user.approved && info.users.length > 1)) && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
+                {(!user || (!user.approved && info.users.length > 1)) && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
                   <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
                 </Tooltip>
                 }
