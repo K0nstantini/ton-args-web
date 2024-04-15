@@ -18,14 +18,14 @@ const theme = createTheme({
   },
 });
 
-// this manifest is used temporarily for development purposes
-const manifestUrl = 'https://K0nstantini.github.io/ton-args-web/tonconnect-manifest.json';
-// const manifestUrl = 'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json';
+const manifestUrl = window.location.hostname == 'localhost'
+  ? 'https://raw.githubusercontent.com/K0nstantini/ton-args-web/main/local-tonconnect-manifest.json'
+  : 'https://K0nstantini.github.io/ton-args-web/tonconnect-manifest.json';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-<ThemeProvider theme={theme}>
-  <TonConnectUIProvider manifestUrl={manifestUrl}>
-    <App />
-  </TonConnectUIProvider>,
+  <ThemeProvider theme={theme}>
+    <TonConnectUIProvider manifestUrl={manifestUrl}>
+      <App />
+    </TonConnectUIProvider>,
   </ThemeProvider>
 )

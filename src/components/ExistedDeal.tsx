@@ -26,7 +26,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const [isArbiter, setIsArbiter] = useState(false);
   const [status, setStatus] = useState('');
   const [amount, setAmount] = useState(0);
-  const [approve, setApprove] = useState(info.users.length > 1);
+  const [approve, setApprove] = useState(info.users.length > 1 || !user);
   const [availability, setAvailability] = useState(true);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
                   label="Amount"
                   tonIcon
                   onChange={setAmount} />
-                {(!user || !user.approved) && info.users.length > 1 && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
+                { (!user || (!user.approved && info.users.length > 1)) && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
                   <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
                 </Tooltip>
                 }
