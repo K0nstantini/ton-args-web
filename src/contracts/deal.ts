@@ -53,6 +53,20 @@ export default class Deal implements Contract {
     });
   }
 
+  async sendApprove(provider: ContractProvider, via: Sender) {
+    const messageBody = beginCell()
+      .storeUint(0, 32)
+      .storeStringTail("approve")
+      .endCell();
+
+    await provider.internal(via, {
+      value: "0.1",
+      body: messageBody
+    });
+
+  }
+
+
   async sendWithdraw(provider: ContractProvider, via: Sender) {
     const messageBody = beginCell()
       .storeUint(0, 32)

@@ -22,6 +22,10 @@
   width: fit-content;
 }
 
+.status {
+  color: green;
+}
+
 .addr {
   display: flex;
   flex-direction: row;
@@ -29,14 +33,21 @@
   align-items: baseline;
 }
 
-.header {
-  width: 120px;
-}
-
-.statusAndFee {
+.addressesAndFees{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 8px;
+}
+
+.header {
+  width: 60px;
+}
+
+.addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .fees {
@@ -50,10 +61,11 @@
   justify-content: space-between;
 }
 
-.joinAdd {
+.action {
   display: inline-flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 8px;
 }
 
 .amountApprove {
