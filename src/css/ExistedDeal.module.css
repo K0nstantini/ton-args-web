@@ -78,6 +78,12 @@
   flex-grow: 1;
 }
 
+.winner {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
 .noConnection {
   text-align: right;
   font-style: italic;

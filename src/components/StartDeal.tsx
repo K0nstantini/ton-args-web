@@ -18,7 +18,6 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   const [searchValue, setSearchValue] = useState('');
   const [address, setAddress] = useState<null | Address>();
   const [invalidAddress, setInvalidAddress] = useState(false);
-  // const [isDeal, setIsDeal] = useState(false);
   const [dealInfo, setDealInfo] = useState<DealInfo | null>(null);
 
   const dealContract = useAsyncInitialize(async () => {
@@ -28,7 +27,6 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
   }, [client, address]);
 
   useEffect(() => {
-    // setIsDeal(false);
     try {
       setAddress(Address.parse(searchValue));
     } catch {
@@ -45,7 +43,6 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
       if (!dealContract) return;
       const info = await dealContract.getInfo();
       setDealInfo(info);
-      // setIsDeal(!(!address || !info));
     }
     getData();
   }, [dealContract]);

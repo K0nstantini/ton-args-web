@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  VITE_MAIN_CONTRACT: 'EQBilAuDfsMJNrVT_As-7C0V09q5jDliqGydxH4sIDgQHjeZ'
+  VITE_MAIN_CONTRACT: 'EQDcV8bwdpPWjYHzRApOAxczfhK7WrvfLQN6ho5Zv9MerU1B'
 
 permissions:
   contents: read

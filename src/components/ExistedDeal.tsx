@@ -12,6 +12,7 @@ import { isCurrentUser } from "../Utils";
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import { AddressField } from "./AddressField";
 
 type Props = {
   deal: OpenedContract<Deal>,
@@ -31,6 +32,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const [amount, setAmount] = useState(0);
   const [approve, setApprove] = useState(info.users.length > 1 || !user);
   const [availability, setAvailability] = useState(true);
+  const [winner, setWinner] = useState<Address | null | undefined>();
 
   useEffect(() => {
     setStatus(info.draw ? 'Draw. You can take your money back' : (info.approved ? 'Awaiting results' : 'Active'));
@@ -66,6 +68,10 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
     await deal.sendWithdraw(sender);
   };
 
+  const sendWinner = async () => {
+    await deal.sendWinner(sender, winner);
+  };
+
   return (
     <Paper
       className={styles.paper}
@@ -82,17 +88,21 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
             <Fees arbiterFee={info.arbiterFee} contractFee={info.mainFee} />
           </div>
           <UsersTable users={users} />
-          {connected && !isArbiter && !info.approved && (!user || !user.refused) &&
+          {connected &&
             <Actions
               info={info}
               user={user}
+              isArbiter={isArbiter}
               approve={approve}
               amount={amount}
+              winner={winner}
               setApprove={setApprove}
               setAmount={setAmount}
+              setWinner={setWinner}
               sendAddAmount={sendAddAmount}
               sendApprove={sendApprove}
-              sendWithdraw={sendWithdraw} />
+              sendWithdraw={sendWithdraw}
+              sendWinner={sendWinner}/>
           }
           {!connected && <Typography className={styles.noConnection}>Connect to action</Typography>}
         </div>
@@ -191,10 +201,10 @@ function UsersTable({ users }: TableProps) {
               selected={row.connected}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
               {row.refused
-                ? <TableCell sx={{ color: 'red' }}><CancelOutlinedIcon/></TableCell>
+                ? <TableCell sx={{ color: 'darkred' }}><CancelOutlinedIcon /></TableCell>
                 : row.approved
-                  ? <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon/></TableCell>
-                  : <TableCell><AccessTimeOutlinedIcon/></TableCell>
+                  ? <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon /></TableCell>
+                  : <TableCell><AccessTimeOutlinedIcon /></TableCell>
               }
               <TableCell align="right"><PlainText text={row.amount} /></TableCell>
               <TableCell ><PlainText text={row.address} />
@@ -210,52 +220,81 @@ function UsersTable({ users }: TableProps) {
 type ActionsProps = {
   info: DealInfo,
   user: UserInfo | null,
+  isArbiter: boolean,
   approve: boolean,
   amount: number,
+  winner: Address | null | undefined,
   setApprove: (approve: boolean) => void,
   setAmount: (amount: number) => void,
+  setWinner: (addr: Address | null | undefined) => void,
   sendAddAmount: () => void,
   sendApprove: () => void,
   sendWithdraw: () => void,
+  sendWinner: () => void,
 }
 
-function Actions({ info, user, approve, amount, setApprove, setAmount, sendAddAmount, sendApprove, sendWithdraw }: ActionsProps) {
+function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, setAmount, sendAddAmount, sendApprove, setWinner, sendWithdraw, sendWinner }: ActionsProps) {
   const showApproveSwitch = !user || (!user.approved && info.users.length > 1);
   const showApproveBtn = user && !user.approved && info.users.length > 1;
   const showWithdrawBtn = user && !user.refused;
+  const incorrectAddr = winner != null && info.users.every(u => Address.normalize(u.address) != Address.normalize(winner));
+  const withdrawDisabled = winner != undefined && (!winner || incorrectAddr);
 
   return (
     <div className={styles.action}>
-      <div className={styles.amountApprove}>
-        <NumberField
-          className={styles.amount}
-          label="Amount"
-          tonIcon
-          onChange={setAmount} />
-        {showApproveSwitch && <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
-          <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
-        </Tooltip>
-        }
-      </div>
-      <Button
-        disabled={amount <= 0}
-        variant="outlined"
-        onClick={sendAddAmount}>
-        {user ? 'Add' : 'Join'}
-      </Button>
-      {showApproveBtn && <Button
-        variant="outlined"
-        color="success"
-        onClick={sendApprove}>
-        Approve
-      </Button>
+      {!approve &&
+        <div>
+          <div className={styles.amountApprove}>
+            <NumberField
+              className={styles.amount}
+              label="Amount"
+              tonIcon
+              onChange={setAmount} />
+            {showApproveSwitch &&
+              <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
+                <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
+              </Tooltip>
+            }
+          </div>
+          <Button
+            disabled={amount <= 0}
+            variant="outlined"
+            onClick={sendAddAmount}>
+            {user ? 'Add' : 'Join'}
+          </Button>
+        </div>
       }
-      {showWithdrawBtn && <Button
-        variant="outlined"
-        color="warning"
-        onClick={sendWithdraw}>
-        Withdraw
-      </Button>
+      {showApproveBtn &&
+        <Button
+          variant="outlined"
+          color="success"
+          onClick={sendApprove}>
+          Approve
+        </Button>
+      }
+      {showWithdrawBtn &&
+        <Button
+          variant="outlined"
+          color="warning"
+          onClick={sendWithdraw}>
+          Withdraw
+        </Button>
+      }
+      {isArbiter &&
+        <div className={styles.winner}>
+          <AddressField
+            className={styles.winnerAddr}
+            fullWidth
+            label="Winner address (empty if draw)"
+            incorrectAddr={incorrectAddr}
+            onChange={setWinner}/>
+          <Button
+            disabled={withdrawDisabled}
+            variant="outlined"
+            onClick={sendWinner}>
+            Award
+          </Button>
+        </div>
       }
     </div>
   );

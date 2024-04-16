@@ -66,11 +66,22 @@ export default class Deal implements Contract {
 
   }
 
-
   async sendWithdraw(provider: ContractProvider, via: Sender) {
     const messageBody = beginCell()
       .storeUint(0, 32)
       .storeStringTail("withdraw")
+      .endCell();
+
+    await provider.internal(via, {
+      value: "0.1",
+      body: messageBody
+    });
+  }
+
+  async sendWinner(provider: ContractProvider, via: Sender, addr: Address | null | undefined) {
+    const messageBody = beginCell()
+      .storeUint(2167593794, 32)
+      .storeAddress(addr ? addr : this.address) // send self address if no winner
       .endCell();
 
     await provider.internal(via, {
