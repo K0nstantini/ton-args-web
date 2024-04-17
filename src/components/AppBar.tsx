@@ -1,7 +1,8 @@
 import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import { TonConnectButton } from "@tonconnect/ui-react";
+import { TonConnectButton, useTonConnectModal, useTonConnectUI } from "@tonconnect/ui-react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
+import { useTonConnect } from "../hooks/useTonConnect";
 
 export function AppAppBar() {
   const logoStyle = {
@@ -9,10 +10,13 @@ export function AppAppBar() {
     height: 'auto',
     cursor: 'pointer',
   };
-  const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const { connected } = useTonConnect();
+  const { open: openConnectModal } = useTonConnectModal();
+  const [tonConnectUI] = useTonConnectUI();
 
   const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+    setOpenDrawer(newOpen);
   };
 
   const openContract = () => {
@@ -25,6 +29,15 @@ export function AppAppBar() {
   const openSource = () => {
     window.open("https://github.com/K0nstantini/ton-args/tree/main/contracts", "_blank", "noreferrer");
   };
+
+  const openTonConnect = async () => {
+    setOpenDrawer(false);
+    if (connected) {
+      tonConnectUI.disconnect();
+    } else {
+      openConnectModal();
+    }
+  }
 
 
   return (
@@ -117,7 +130,7 @@ export function AppAppBar() {
             >
               <MenuIcon />
             </Button>
-            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+            <Drawer anchor="right" open={openDrawer} onClose={toggleDrawer(false)}>
               <Box
                 sx={{
                   minWidth: '60dvw',
@@ -140,9 +153,13 @@ export function AppAppBar() {
                 <MenuItem> FAQ </MenuItem>
                 <Divider />
                 <MenuItem>
-                  <TonConnectButton
-                    style={{ width: '100%' }}
-                  />
+                  <Button
+                    variant="contained"
+                    sx={{ width: '100%' }}
+                    onClick={openTonConnect}
+                  >
+                    {connected ? "Disconnect" : "Connect"}
+                  </Button>
                 </MenuItem>
               </Box>
             </Drawer>
