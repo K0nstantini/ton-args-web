@@ -15,6 +15,11 @@ export function AppAppBar() {
     window.open(`${url}/address/${address}`, "_blank", "noreferrer");
   };
 
+  const openSource = () => {
+    window.open("https://github.com/K0nstantini/ton-args/tree/main/contracts", "_blank", "noreferrer");
+  };
+
+
   return (
     <AppBar
       position="fixed"
@@ -70,14 +75,21 @@ export function AppAppBar() {
                 <Typography variant="body2" color="text.primary"> Contract </Typography>
               </MenuItem>
             </Box>
-          <Tooltip title="Coming soon">
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <MenuItem
-                onClick={() => { }}
+                onClick={openSource}
                 sx={{ py: '6px', px: '12px' }} >
-                <Typography variant="body2" color="text.primary"> FAQ </Typography>
+                <Typography variant="body2" color="text.primary"> Source </Typography>
               </MenuItem>
             </Box>
+            <Tooltip title="Coming soon">
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <MenuItem
+                  onClick={() => { }}
+                  sx={{ py: '6px', px: '12px' }} >
+                  <Typography variant="body2" color="text.primary"> FAQ </Typography>
+                </MenuItem>
+              </Box>
             </Tooltip>
           </Box>
           <Box
