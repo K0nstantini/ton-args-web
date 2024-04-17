@@ -5,7 +5,14 @@
   flex-direction: column;
   margin-top: 16px;
   gap: 16px;
-  /* margin-left: 32px; */
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+@media (min-width: 750px) {
+  .paper {
+    width: 750px;
+  }
 }
 
 .close {
@@ -23,23 +30,6 @@
   display: flex;
   flex-direction: row;
   gap: 8px;
-}
-
-.address {
-  width: 600px;
-}
-
-.amount {
-  width: 400px;
-}
-
-.fee {
-  width: 192px;
-  margin-left: 16px;
-}
-
-.create {
-  width: 600px;
 }
 
 .noConnection {

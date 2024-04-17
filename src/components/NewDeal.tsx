@@ -1,4 +1,4 @@
-import { Button, Paper, TextField, Typography } from "@mui/material";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from '../css/NewDeal.module.css'
 import { Address } from "@ton/ton";
@@ -75,15 +75,10 @@ export function NewDeal({ close }: Props) {
         gutterBottom>
         New deal
       </Typography>
-      <TextField
-        className={styles.address}
-        label={invalidAddress ? 'Invalid address' : (incorrectAddress ? 'Incorrect Address' : 'Arbiter address')}
-        error={invalidAddress || incorrectAddress}
-        variant="outlined"
-        onChange={e => setAddrValue(e.target.value)} />
       <div className={styles.amountAndFee} >
         <NumberField
           className={styles.amount}
+          fullWidth
           label="Amount"
           tonIcon
           onChange={setAmount} />
@@ -93,15 +88,30 @@ export function NewDeal({ close }: Props) {
           error={fee > MAX_FEE}
           onChange={setFee} />
       </div>
-      {connected
-        ? <Button
-          className={styles.create}
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={1}
+        useFlexGap
+        sx={{ width: { xs: '100%', sm: 'auto' } }}
+      >
+        <TextField
+          className={styles.address}
+          fullWidth
+          label={invalidAddress ? 'Invalid address' : (incorrectAddress ? 'Incorrect Address' : 'Arbiter address')}
+          error={invalidAddress || incorrectAddress}
           variant="outlined"
-          disabled={!canCreate}
-          onClick={() => setNewDeal(true)}>
-          Create
-        </Button>
-        : <Typography className={styles.noConnection}>Connect to action</Typography>}
+          onChange={e => setAddrValue(e.target.value)} />
+        {connected &&
+          <Button
+            className={styles.create}
+            variant="outlined"
+            disabled={!canCreate}
+            onClick={() => setNewDeal(true)}>
+            Create
+          </Button>
+        }
+      </Stack>
+      {!connected && <Typography className={styles.noConnection}>Connect to action</Typography>}
     </Paper>
 
   );
