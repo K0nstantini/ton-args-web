@@ -1,11 +1,18 @@
-import { AppBar, Box, Container, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { TonConnectButton } from "@tonconnect/ui-react";
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState } from "react";
 
 export function AppAppBar() {
   const logoStyle = {
     width: '40px',
     height: 'auto',
     cursor: 'pointer',
+  };
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
   };
 
   const openContract = () => {
@@ -97,9 +104,48 @@ export function AppAppBar() {
               display: { xs: 'none', md: 'flex' },
               gap: 0.5,
               alignItems: 'center',
-            }}
-          >
+            }} >
             <TonConnectButton />
+          </Box>
+          <Box sx={{ display: { sm: '', md: 'none' } }}>
+            <Button
+              variant="text"
+              color="primary"
+              aria-label="menu"
+              onClick={toggleDrawer(true)}
+              sx={{ minWidth: '30px', p: '4px' }}
+            >
+              <MenuIcon />
+            </Button>
+            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Box
+                sx={{
+                  minWidth: '60dvw',
+                  p: 2,
+                  backgroundColor: 'background.paper',
+                  flexGrow: 1,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'end',
+                    flexGrow: 1,
+                  }}
+                >
+                </Box>
+                <MenuItem onClick={openContract}> Contract </MenuItem>
+                <MenuItem onClick={openSource}> Source </MenuItem>
+                <MenuItem> FAQ </MenuItem>
+                <Divider />
+                <MenuItem>
+                  <TonConnectButton
+                    style={{ width: '100%' }}
+                  />
+                </MenuItem>
+              </Box>
+            </Drawer>
           </Box>
         </Toolbar>
       </Container>

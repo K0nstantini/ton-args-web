@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { NewDeal } from './components/NewDeal';
 import { ExistedDeal } from './components/ExistedDeal';
 import Deal, { DealInfo } from './contracts/deal';
-import { AppAppBar } from './components/AppBar';
+import { AppAppBar } from "./components/AppBar";
+import '@twa-dev/sdk';
 
 function App() {
   const [newDeal, setNewDeal] = useState(false);
