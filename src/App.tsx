@@ -1,12 +1,12 @@
 import './App.css';
 import { Header } from './components/Header';
-import { TonConnectBtn } from './components/TonConnect';
 import { StartDeal } from './components/StartDeal';
 import { OpenedContract } from '@ton/core';
 import { useEffect, useState } from 'react';
 import { NewDeal } from './components/NewDeal';
 import { ExistedDeal } from './components/ExistedDeal';
 import Deal, { DealInfo } from './contracts/deal';
+import { AppAppBar } from './components/AppBar';
 
 function App() {
   const [newDeal, setNewDeal] = useState(false);
@@ -26,8 +26,8 @@ function App() {
 
   return (
     <div className="app">
+      <AppAppBar />
       <Header />
-      <TonConnectBtn />
       <div className="body">
         <StartDeal
           showNewDeal={!newDeal}

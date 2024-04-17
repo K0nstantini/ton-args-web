@@ -9,6 +9,7 @@ on:
 
 env:
   VITE_MAIN_CONTRACT: 'EQCnHIz2CLStgBMvYlQSqtHrjVAx9SGRdxt-EjDAF0DMhhiq'
+  VITE_NET: 'testnet'
 
 permissions:
   contents: read

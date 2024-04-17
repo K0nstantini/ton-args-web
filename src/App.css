@@ -15,4 +15,7 @@ body {
   flex-direction: column;
 }
 
-
+.app {
+  /* display: flex; */
+  /* flex-direction: column; */
+}
