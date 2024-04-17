@@ -39,7 +39,6 @@ export function AppAppBar() {
     }
   }
 
-
   return (
     <AppBar
       position="fixed"
@@ -77,7 +76,7 @@ export function AppAppBar() {
               flexGrow: 1,
               display: 'flex',
               alignItems: 'center',
-              ml: '-18px',
+              ml: '-12px',
               px: 0,
             }}
           >
