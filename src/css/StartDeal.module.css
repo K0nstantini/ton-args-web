@@ -1,14 +1,17 @@
 .paper {
-  position: relative;
   padding: 16px;
-  display: inline-flex;
-  flex-direction: row;
   margin-top: 16px;
   gap: 16px;
-  margin-left: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
-.search {
-  width: 600px;
-}
 
+@media (min-width: 750px) {
+  .paper {
+    width: 750px;
+  }
+  .search {
+    width: 600px;
+  }
+}

@@ -1,4 +1,4 @@
-import { Button, InputAdornment, Paper, TextField } from "@mui/material";
+import { Button, InputAdornment, Paper, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import styles from '../css/StartDeal.module.css'
@@ -58,33 +58,42 @@ export function StartDeal({ showNewDeal, findDeal, newDeal: createDeal }: Props)
     <Paper
       className={styles.paper}
       elevation={3}>
-      <TextField
-        className={styles.search}
-        variant="outlined"
-        placeholder="Find Deal"
-        error={invalidAddress}
-        label={invalidAddress ? 'Invalid address' : ''}
-        value={searchValue}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end" >
-              <Button
-                variant="outlined"
-                disabled={!dealInfo || !address}
-                onClick={searchClick}>
-                <ArrowForwardIosOutlinedIcon />
-              </Button>
-            </InputAdornment>
-          ),
-        }}
-        onChange={e => setSearchValue(e.target.value)}
-      />
-      {showNewDeal && <Button
-        variant="outlined"
-        onClick={createDeal} >
-        New deal
-      </Button>
-      }
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={1}
+        useFlexGap
+        sx={{ width: { xs: '100%', sm: 'auto' } }}
+      >
+        <TextField
+          className={styles.search}
+          variant="outlined"
+          fullWidth={!showNewDeal}
+          placeholder="Find Deal"
+          error={invalidAddress}
+          label={invalidAddress ? 'Invalid address' : ''}
+          value={searchValue}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end" >
+                <Button
+                  variant="outlined"
+                  disabled={!dealInfo || !address}
+                  onClick={searchClick}>
+                  <ArrowForwardIosOutlinedIcon />
+                </Button>
+              </InputAdornment>
+            ),
+          }}
+          onChange={e => setSearchValue(e.target.value)}
+        />
+        {showNewDeal && <Button
+          className={styles.newDealButton}
+          variant="outlined"
+          onClick={createDeal} >
+          New deal
+        </Button>
+        }
+      </Stack>
 
     </Paper>
 
