@@ -12,6 +12,7 @@ export default class Deal implements Contract {
       const mainFee = stack.readNumber() / 10_000;
       const approved = stack.readBoolean();
       const draw = stack.readBoolean();
+      const lastCancel = stack.readNumber();
 
       const values = stack.readCell().beginParse().loadDictDirect(Dictionary.Keys.Address(), Dictionary.Values.Cell()).values();
       const users: DealUser[] = values.map((c) => {
@@ -19,7 +20,7 @@ export default class Deal implements Contract {
         const user: DealUser = {
           address: s.loadAddress(),
           sum: Number(s.loadCoins() / 1_000n) / 1_000_000,
-          approved: s.loadBoolean(),
+          approved: s.loadUint(32),
           refused: s.loadBoolean()
         };
         return user;
@@ -31,8 +32,8 @@ export default class Deal implements Contract {
         mainFee,
         approved,
         draw,
+        lastCancel,
         users
-        // addresses
       };
       return info;
     } catch {
@@ -98,12 +99,13 @@ export interface DealInfo {
   mainFee: number,
   approved: boolean,
   draw: boolean,
+  lastCancel: number,
   users: DealUser[]
 }
 
 export interface DealUser {
   address: Address,
   sum: number,
-  approved: boolean,
+  approved: number,
   refused: boolean
 }

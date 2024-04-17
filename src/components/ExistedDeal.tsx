@@ -3,7 +3,7 @@ import styles from '../css/ExistedDeal.module.css'
 import { NumberField } from "./NumberField";
 import { Address, OpenedContract } from "@ton/core";
 import Deal, { DealInfo, DealUser } from "../contracts/deal";
-import { Button, FormControlLabel, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import { Button, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { CloseBtn } from "./buttons/CloseBtn";
@@ -12,6 +12,7 @@ import { isCurrentUser } from "../Utils";
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import { AddressField } from "./AddressField";
 
 type Props = {
@@ -35,7 +36,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const [winner, setWinner] = useState<Address | null | undefined>();
 
   useEffect(() => {
-    setStatus(info.draw ? 'Draw. You can take your money back' : (info.approved ? 'Awaiting results' : 'Active'));
+    setStatus(info.draw ? 'Draw. You can take your money back.' : (info.approved ? 'Awaiting results' : 'Active'));
   }, [info]);
 
   useEffect(() => {
@@ -87,7 +88,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
             <Addresses deal={deal.address} arbiter={info.arbiter} />
             <Fees arbiterFee={info.arbiterFee} contractFee={info.mainFee} />
           </div>
-          <UsersTable users={users} />
+          <UsersTable draw={info.draw} users={users} />
           {connected &&
             <Actions
               info={info}
@@ -102,7 +103,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
               sendAddAmount={sendAddAmount}
               sendApprove={sendApprove}
               sendWithdraw={sendWithdraw}
-              sendWinner={sendWinner}/>
+              sendWinner={sendWinner} />
           }
           {!connected && <Typography className={styles.noConnection}>Connect to action</Typography>}
         </div>
@@ -115,7 +116,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
 class UserInfo {
   address: string;
   amount: string;
-  approved: boolean;
+  approved: number;
   refused: boolean;
   connected: boolean;
 
@@ -180,10 +181,11 @@ function Addresses({ deal, arbiter }: AddrProps) {
 }
 
 type TableProps = {
+  draw: boolean,
   users: UserInfo[]
 }
 
-function UsersTable({ users }: TableProps) {
+function UsersTable({ users, draw }: TableProps) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -200,11 +202,13 @@ function UsersTable({ users }: TableProps) {
               key={row.address}
               selected={row.connected}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              {row.refused
-                ? <TableCell sx={{ color: 'darkred' }}><CancelOutlinedIcon /></TableCell>
-                : row.approved
-                  ? <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon /></TableCell>
-                  : <TableCell><AccessTimeOutlinedIcon /></TableCell>
+              {draw
+                ? <TableCell sx={{ color: 'green' }}><PaidOutlinedIcon/></TableCell>
+                : row.refused
+                  ? <TableCell sx={{ color: 'darkred' }}><CancelOutlinedIcon /></TableCell>
+                  : row.approved
+                    ? <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon /></TableCell>
+                    : <TableCell><AccessTimeOutlinedIcon /></TableCell>
               }
               <TableCell align="right"><PlainText text={row.amount} /></TableCell>
               <TableCell ><PlainText text={row.address} />
@@ -234,34 +238,38 @@ type ActionsProps = {
 }
 
 function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, setAmount, sendAddAmount, sendApprove, setWinner, sendWithdraw, sendWinner }: ActionsProps) {
-  const showApproveSwitch = !user || (!user.approved && info.users.length > 1);
-  const showApproveBtn = user && !user.approved && info.users.length > 1;
-  const showWithdrawBtn = user && !user.refused;
+  const showAddJoint = !info.approved && !isArbiter && !info.draw;
+  const showApproveSwitch = showAddJoint && (!user || (!user.approved && info.users.length > 1));
+  const showApproveBtn = !info.draw && user && !user.approved && info.users.length > 1;
+  const showWithdrawBtn = user; // mb not show if contract is yet approved but user already refused
   const incorrectAddr = winner != null && info.users.every(u => Address.normalize(u.address) != Address.normalize(winner));
   const withdrawDisabled = winner != undefined && (!winner || incorrectAddr);
+  const showAward = isArbiter && info.approved && !info.draw;
 
   return (
     <div className={styles.action}>
-      {!approve &&
-        <div>
-          <div className={styles.amountApprove}>
-            <NumberField
-              className={styles.amount}
-              label="Amount"
-              tonIcon
-              onChange={setAmount} />
-            {showApproveSwitch &&
-              <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
-                <FormControlLabel control={<Switch checked={approve} onChange={() => setApprove(!approve)} />} label="Approve" />
-              </Tooltip>
-            }
-          </div>
+      {showAddJoint &&
+        <div className={styles.addJoin}>
+          <NumberField
+            label="Amount"
+            fullWidth
+            tonIcon
+            onChange={setAmount} />
           <Button
+            className={styles.addJoinBtn}
             disabled={amount <= 0}
             variant="outlined"
             onClick={sendAddAmount}>
             {user ? 'Add' : 'Join'}
           </Button>
+        </div>
+      }
+      {showApproveSwitch &&
+        <div className={styles.approve}>
+          <Tooltip title="If you are the last participant and no further participants or actions are expected, set this option.">
+            <Switch checked={approve} onChange={() => setApprove(!approve)} />
+          </Tooltip>
+          <Typography>Approve</Typography>
         </div>
       }
       {showApproveBtn &&
@@ -280,14 +288,14 @@ function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, s
           Withdraw
         </Button>
       }
-      {isArbiter &&
+      {showAward &&
         <div className={styles.winner}>
           <AddressField
             className={styles.winnerAddr}
             fullWidth
             label="Winner address (empty if draw)"
             incorrectAddr={incorrectAddr}
-            onChange={setWinner}/>
+            onChange={setWinner} />
           <Button
             disabled={withdrawDisabled}
             variant="outlined"

@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 type Props = {
   label: string,
   onChange: (value: number) => void,
+  fullWidth?: boolean,
   error?: boolean,
   className?: string,
   tonIcon?: boolean
 }
 
-export function NumberField({ label, onChange, error, className, tonIcon }: Props) {
+export function NumberField({ label, onChange, fullWidth, error, className, tonIcon }: Props) {
   const [value, setValue] = useState('0');
 
   const changeValue = (v: string) => {
@@ -30,6 +31,7 @@ export function NumberField({ label, onChange, error, className, tonIcon }: Prop
       className={className ? className : ''}
       id="input-with-icon-textfield"
       label={label}
+      fullWidth={fullWidth}
       variant="outlined"
       value={value}
       error={error ? error : false}

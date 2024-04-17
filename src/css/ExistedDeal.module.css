@@ -68,14 +68,20 @@
   margin-top: 8px;
 }
 
-.amountApprove {
+.addJoin {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: row;
+  gap: 8px;
 }
 
-.amount {
-  flex-grow: 1;
+.addJoinBtn {
+  width: 120px;
+}
+
+.approve {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .winner {
@@ -93,8 +99,6 @@
 .notAccessible {
   font-style: italic;
   color: gray;
-  display: flex;
-  justify-content: flex-end;
   padding-right: 16px;
 }
 
