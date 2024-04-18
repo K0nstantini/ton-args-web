@@ -15,6 +15,12 @@
   }
 }
 
+@media (max-width: 750px) {
+  .paper {
+    width: 92%;
+  }
+}
+
 .close {
   position: absolute;
   top: 8px;
