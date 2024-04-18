@@ -4,15 +4,9 @@
   margin-top: 16px;
   display: flex;
   flex-direction: column;
-  /* margin-left: 32px; */
   gap: 16px;
-  width: 750px;
-}
-
-.data {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .refreshClose {
@@ -26,22 +20,61 @@
   color: #0098EA;
 }
 
-.addr {
+@media (min-width: 750px) {
+  .paper {
+    width: 750px;
+  }
+
+  .addressesAndFees{
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .addrHeader {
+    width: 60px;
+  }
+
+  .addr {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .fees {
+    padding: 8px;
+    width: 160px;
+  }
+
+  .winner {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 750px) {
+  .addressesAndFees{
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .fees {
+    margin-top: 8px;
+    box-shadow: none;
+  }
+
+  .winner {
+    flex-direction: column;
+  }
+}
+
+.winner {
   display: flex;
-  flex-direction: row;
   gap: 8px;
-  align-items: baseline;
 }
 
 .addressesAndFees{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   margin-top: 8px;
-}
-
-.header {
-  width: 60px;
 }
 
 .addresses {
@@ -50,16 +83,18 @@
   gap: 8px;
 }
 
-.fees {
-  padding: 8px;
-  width: 160px;
-}
-
 .fee {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+
+.data {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 
 .action {
   display: inline-flex;
@@ -75,7 +110,7 @@
 }
 
 .addJoinBtn {
-  width: 120px;
+  /* width: 120px; */
 }
 
 .approve {
@@ -84,11 +119,11 @@
   align-items: center;
 }
 
-.winner {
-  display: inline-flex;
-  flex-direction: row;
-  gap: 8px;
-}
+/* .winner { */
+/*   display: inline-flex; */
+/*   flex-direction: row; */
+/*   gap: 8px; */
+/* } */
 
 .noConnection {
   text-align: right;

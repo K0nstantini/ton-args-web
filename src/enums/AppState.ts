@@ -1,3 +1,0 @@
-enum AppState {
-  Start
-}

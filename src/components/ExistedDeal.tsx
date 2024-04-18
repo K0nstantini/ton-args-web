@@ -3,7 +3,7 @@ import styles from '../css/ExistedDeal.module.css'
 import { NumberField } from "./NumberField";
 import { Address, OpenedContract } from "@ton/core";
 import Deal, { DealInfo, DealUser } from "../contracts/deal";
-import { Button, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
+import { Button, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import { useTonConnect } from "../hooks/useTonConnect";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { CloseBtn } from "./buttons/CloseBtn";
@@ -13,6 +13,7 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { AddressField } from "./AddressField";
 
 type Props = {
@@ -26,7 +27,7 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const connectedAddress = useTonAddress();
 
   const [info, setInfo] = useState(dealInfo);
-  const [users, setUsers] = useState(dealInfo.users.map(u => new UserInfo(u, connectedAddress)));
+  const [users, setUsers] = useState(dealInfo.users.map(u => new UserInfo(info, u, connectedAddress)));
   const [user, setUser] = useState<UserInfo | null>(null);
   const [isArbiter, setIsArbiter] = useState(false);
   const [status, setStatus] = useState('');
@@ -36,12 +37,12 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
   const [winner, setWinner] = useState<Address | null | undefined>();
 
   useEffect(() => {
-    setStatus(info.draw ? 'Draw. You can take your money back.' : (info.approved ? 'Awaiting results' : 'Active'));
+    setStatus(info.draw ? 'Draw. You can withdraw your funds.' : (info.approved ? 'Awaiting results' : 'Active'));
   }, [info]);
 
   useEffect(() => {
     setIsArbiter(isCurrentUser(info.arbiter, connectedAddress));
-    setUsers(info.users.map(u => new UserInfo(u, connectedAddress)));
+    setUsers(info.users.map(u => new UserInfo(info, u, connectedAddress)));
   }, [connectedAddress, info]);
 
   useEffect(() => {
@@ -81,14 +82,14 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
         <RefreshBtn onClick={refresh}></RefreshBtn>
         <CloseBtn onClick={close}></CloseBtn>
       </div>
-      {availability ?
+      {availability &&
         <div className={styles.data}>
           <Typography className={styles.status} variant="h6" > {status}</Typography>
           <div className={styles.addressesAndFees}>
             <Addresses deal={deal.address} arbiter={info.arbiter} />
             <Fees arbiterFee={info.arbiterFee} contractFee={info.mainFee} />
           </div>
-          <UsersTable draw={info.draw} users={users} />
+          <UsersTable info={info} users={users} />
           {connected &&
             <Actions
               info={info}
@@ -107,7 +108,8 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
           }
           {!connected && <Typography className={styles.noConnection}>Connect to action</Typography>}
         </div>
-        : <Typography className={styles.notAccessible}>Contract not accessible</Typography>}
+      }
+      {!availability && <Typography className={styles.notAccessible}>Contract not accessible</Typography>}
     </Paper>
 
   );
@@ -116,16 +118,18 @@ export function ExistedDeal({ deal, dealInfo, close }: Props) {
 class UserInfo {
   address: string;
   amount: string;
-  approved: number;
+  approved: boolean;
+  approvedIsValid: boolean;
   refused: boolean;
   connected: boolean;
 
-  constructor(info: DealUser, conAddr: string) {
-    this.address = info.address.toString();
-    this.amount = info.sum.toString();
-    this.approved = info.approved;
-    this.refused = info.refused;
-    this.connected = isCurrentUser(info.address, conAddr);
+  constructor(info: DealInfo, usr: DealUser, conAddr: string) {
+    this.address = usr.address.toString();
+    this.amount = usr.sum.toString();
+    this.approved = usr.approved > 0;
+    this.approvedIsValid = usr.approved > 0 && usr.approved >= info.lastCancel;
+    this.refused = usr.refused;
+    this.connected = isCurrentUser(usr.address, conAddr);
   }
 }
 
@@ -135,7 +139,7 @@ type TProps = {
 
 const PlainText: React.FC<TProps> = ({ text }) => {
   return (
-    <Typography> {text} </Typography>
+    <Typography sx={{ typography: { sm: 'body1', xs: 'body2' } }}> {text} </Typography>
   );
 };
 
@@ -146,7 +150,14 @@ type FeesProps = {
 
 function Fees({ arbiterFee, contractFee }: FeesProps) {
   return (
-    <Paper className={styles.fees}>
+    <Paper
+      className={styles.fees}
+      sx={{
+        '@media (max-width: 750px)': {
+          boxShadow: 'none',
+        },
+      }}
+    >
       <div className={styles.fee}>
         <Typography variant="subtitle2">Arbiter fee</Typography>
         <Typography variant="body2"> {arbiterFee} %</Typography>
@@ -164,16 +175,29 @@ type AddrProps = {
   arbiter: Address
 }
 
+// del ':', move out isMobile (and from other places)
 function Addresses({ deal, arbiter }: AddrProps) {
+  const isMobile = useMediaQuery('(max-width:750px)');
+  const needShortAddr = useMediaQuery('(max-width:450px)');
   return (
     <div className={styles.addresses}>
       <div className={styles.addr}>
-        <Typography className={styles.header} variant="subtitle1" > Deal:</Typography>
-        <Typography variant="body1"> {deal.toString()} </Typography>
+        <Typography
+          className={styles.addrHeader}
+          variant="subtitle1"
+          sx={isMobile ? { typography: 'subtitle2' } : {}}>
+          Deal:
+        </Typography>
+        <Typography sx={{ typography: { sm: 'body1', xs: 'body2' } }} > {needShortAddr ? shortAddr(deal.toString()) : deal.toString()} </Typography>
       </div>
       <div className={styles.addr}>
-        <Typography className={styles.header} variant="subtitle1" > Arbiter: </Typography>
-        <Typography variant="body1"> {arbiter.toString()} </Typography>
+        <Typography
+          className={styles.addrHeader}
+          variant="subtitle1"
+          sx={isMobile ? { typography: 'subtitle2' } : {}}>
+          Arbiter:
+        </Typography>
+        <Typography sx={{ typography: { sm: 'body1', xs: 'body2' } }}> {needShortAddr ? shortAddr(arbiter.toString()) : arbiter.toString()} </Typography>
       </div>
     </div>
 
@@ -181,14 +205,56 @@ function Addresses({ deal, arbiter }: AddrProps) {
 }
 
 type TableProps = {
-  draw: boolean,
+  info: DealInfo,
   users: UserInfo[]
 }
 
-function UsersTable({ users, draw }: TableProps) {
+function UsersTable({ info, users }: TableProps) {
+  const isMobile = useMediaQuery('(max-width:750px)');
+
+  const Draw = () => {
+    return (
+      <Tooltip title="Funds available for withdrawal">
+        <TableCell sx={{ color: 'green' }}><PaidOutlinedIcon /></TableCell>
+      </Tooltip>
+    );
+  };
+
+  const Refused = () => {
+    return (
+      <Tooltip title="Participant requests fund withdrawal">
+        <TableCell sx={{ color: 'darkred' }}><CancelOutlinedIcon /></TableCell>
+      </Tooltip>
+    );
+  };
+
+  const Approved = () => {
+    return (
+      <Tooltip title="Participant approved">
+        <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon /></TableCell>
+      </Tooltip>
+    );
+  };
+
+  const ExpiredApproved = () => {
+    return (
+      <Tooltip title="Participant approval expired">
+        <TableCell sx={{ color: 'darkorange' }}><ErrorOutlineOutlinedIcon /></TableCell>
+      </Tooltip>
+    );
+  };
+
+  const AwaitingAction = () => {
+    return (
+      <Tooltip title="Awaiting further action">
+        <TableCell><AccessTimeOutlinedIcon /></TableCell>
+      </Tooltip>
+    );
+  };
+
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table" >
         <TableHead>
           <TableRow>
             <TableCell>Status</TableCell>
@@ -202,16 +268,14 @@ function UsersTable({ users, draw }: TableProps) {
               key={row.address}
               selected={row.connected}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              {draw
-                ? <TableCell sx={{ color: 'green' }}><PaidOutlinedIcon/></TableCell>
-                : row.refused
-                  ? <TableCell sx={{ color: 'darkred' }}><CancelOutlinedIcon /></TableCell>
-                  : row.approved
-                    ? <TableCell sx={{ color: 'green' }}><CheckCircleOutlineOutlinedIcon /></TableCell>
-                    : <TableCell><AccessTimeOutlinedIcon /></TableCell>
+              {info.draw ? <Draw />
+                : row.refused ? <Refused />
+                  : row.approvedIsValid ? <Approved />
+                    : row.approved ? <ExpiredApproved />
+                      : <AwaitingAction />
               }
-              <TableCell align="right"><PlainText text={row.amount} /></TableCell>
-              <TableCell ><PlainText text={row.address} />
+              <TableCell align="right" sx={{ color: 'darkgreen' }}><PlainText text={row.amount} /></TableCell>
+              <TableCell ><PlainText text={isMobile ? shortAddr(row.address) : row.address} />
               </TableCell>
             </TableRow>
           ))}
@@ -239,9 +303,9 @@ type ActionsProps = {
 
 function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, setAmount, sendAddAmount, sendApprove, setWinner, sendWithdraw, sendWinner }: ActionsProps) {
   const showAddJoint = !info.approved && !isArbiter && !info.draw;
-  const showApproveSwitch = showAddJoint && (!user || (!user.approved && info.users.length > 1));
-  const showApproveBtn = !info.draw && user && !user.approved && info.users.length > 1;
-  const showWithdrawBtn = user; // mb not show if contract is yet approved but user already refused
+  const showApproveSwitch = showAddJoint && (!user || (!user.approvedIsValid && info.users.length > 1));
+  const showApproveBtn = !info.draw && user && !user.approvedIsValid && info.users.length > 1;
+  const showWithdrawBtn = user && !user.refused; // mb not show if contract is yet approved but user already refused
   const incorrectAddr = winner != null && info.users.every(u => Address.normalize(u.address) != Address.normalize(winner));
   const withdrawDisabled = winner != undefined && (!winner || incorrectAddr);
   const showAward = isArbiter && info.approved && !info.draw;
@@ -291,7 +355,6 @@ function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, s
       {showAward &&
         <div className={styles.winner}>
           <AddressField
-            className={styles.winnerAddr}
             fullWidth
             label="Winner address (empty if draw)"
             incorrectAddr={incorrectAddr}
@@ -306,4 +369,12 @@ function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, s
       }
     </div>
   );
+}
+
+function shortAddr(addr: string) {
+  if (addr.length <= 8) {
+    return addr;
+  } else {
+    return `${addr.slice(0, 6)}...${addr.slice(-6)}`;
+  }
 }

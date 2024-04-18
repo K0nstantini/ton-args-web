@@ -14,7 +14,9 @@ export const Header = () => {
         className={styles.tonLabel}
         component="h2"
         variant="h4"
-        gutterBottom>
+        gutterBottom
+        sx={{ fontWeight: 'bold' }}
+      >
         TON
       </Typography>
     </div>
