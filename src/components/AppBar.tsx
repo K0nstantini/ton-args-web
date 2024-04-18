@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar } from "@mui/material";
 import { TonConnectButton, useTonConnectModal, useTonConnectUI } from "@tonconnect/ui-react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
@@ -102,11 +102,6 @@ export function AppAppBar() {
                   alt="Contract"
                 />
               </a>
-              <MenuItem
-                onClick={() => window.open(contractUrl(), "_blank", "noreferrer")}
-                sx={{ py: '6px', px: '12px' }} >
-                <Typography variant="body2" color="text.primary"> Contract </Typography>
-              </MenuItem>
             </Box>
           </Box>
           <Box
