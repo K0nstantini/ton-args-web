@@ -1,15 +1,20 @@
-import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar, Typography } from "@mui/material";
 import { TonConnectButton, useTonConnectModal, useTonConnectUI } from "@tonconnect/ui-react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import { useTonConnect } from "../hooks/useTonConnect";
 
 export function AppAppBar() {
-  const logoStyle = {
-    width: '40px',
-    height: 'auto',
-    cursor: 'pointer',
+  const sourceUrl = "https://github.com/K0nstantini/ton-args/tree/main/contracts";
+  const siteUrl = "https://k0nstantini.github.io/ton-args-web/";
+  const contractUrl = () => {
+    const address = import.meta.env.VITE_MAIN_CONTRACT;
+    const net = import.meta.env.VITE_NET;
+    const url = net && net == "mainnet" ? "https://tonscan.org" : "https://testnet.tonscan.org";
+    return `${url}/address/${address}`;
   };
+
+
   const [openDrawer, setOpenDrawer] = useState(false);
   const { connected } = useTonConnect();
   const { open: openConnectModal } = useTonConnectModal();
@@ -17,17 +22,6 @@ export function AppAppBar() {
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpenDrawer(newOpen);
-  };
-
-  const openContract = () => {
-    const address = import.meta.env.VITE_MAIN_CONTRACT;
-    const net = import.meta.env.VITE_NET;
-    const url = net && net == "mainnet" ? "https://tonscan.org" : "https://testnet.tonscan.org";
-    window.open(`${url}/address/${address}`, "_blank", "noreferrer");
-  };
-
-  const openSource = () => {
-    window.open("https://github.com/K0nstantini/ton-args/tree/main/contracts", "_blank", "noreferrer");
   };
 
   const openTonConnect = async () => {
@@ -80,36 +74,40 @@ export function AppAppBar() {
               px: 0,
             }}
           >
-            <img
-              src={
-                'https://K0nstantini.github.io/ton-args-web/ton.svg'
-              }
-              style={logoStyle}
-              alt="logo of sitemark"
-            />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex', gap: '16px' } }}>
+              <a href="https://t.me/TonArgsBot" target="_blank" rel="noopener noreferrer">
+                <img
+                  src={
+                    'https://K0nstantini.github.io/ton-args-web/telegram.svg'
+                  }
+                  style={{ width: '30px', cursor: 'pointer' }}
+                  alt="Telegram"
+                />
+              </a>
+              <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={
+                    'https://K0nstantini.github.io/ton-args-web/github.svg'
+                  }
+                  style={{ width: '30px', cursor: 'pointer' }}
+                  alt="Source"
+                />
+              </a>
+              <a href={contractUrl()} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={
+                    'https://K0nstantini.github.io/ton-args-web/tonscan.svg'
+                  }
+                  style={{ width: '30px', cursor: 'pointer' }}
+                  alt="Contract"
+                />
+              </a>
               <MenuItem
-                onClick={openContract}
+                onClick={() => window.open(contractUrl(), "_blank", "noreferrer")}
                 sx={{ py: '6px', px: '12px' }} >
                 <Typography variant="body2" color="text.primary"> Contract </Typography>
               </MenuItem>
             </Box>
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <MenuItem
-                onClick={openSource}
-                sx={{ py: '6px', px: '12px' }} >
-                <Typography variant="body2" color="text.primary"> Source </Typography>
-              </MenuItem>
-            </Box>
-            <Tooltip title="Coming soon">
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <MenuItem
-                  onClick={() => { }}
-                  sx={{ py: '6px', px: '12px' }} >
-                  <Typography variant="body2" color="text.primary"> FAQ </Typography>
-                </MenuItem>
-              </Box>
-            </Tooltip>
           </Box>
           <Box
             sx={{
@@ -147,9 +145,18 @@ export function AppAppBar() {
                   }}
                 >
                 </Box>
-                <MenuItem onClick={openContract}> Contract </MenuItem>
-                <MenuItem onClick={openSource}> Source </MenuItem>
-                <MenuItem> FAQ </MenuItem>
+                <MenuItem
+                  onClick={() => window.open(siteUrl, "_blank", "noreferrer")} >
+                  Site
+                </MenuItem>
+                <MenuItem
+                  onClick={() => window.open(contractUrl(), "_blank", "noreferrer")} >
+                  Contract
+                </MenuItem>
+                <MenuItem
+                  onClick={() => window.open(sourceUrl, "_blank", "noreferrer")} >
+                  Source
+                </MenuItem>
                 <Divider />
                 <MenuItem>
                   <Button
