@@ -269,7 +269,7 @@ function UsersTable({ info, users }: TableProps) {
               selected={row.connected}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
               {info.draw ? <Draw />
-                : row.refused ? <Refused />
+                : (row.refused && info.approved) ? <Refused />
                   : row.approvedIsValid ? <Approved />
                     : row.approved ? <ExpiredApproved />
                       : <AwaitingAction />
@@ -305,7 +305,7 @@ function Actions({ info, user, isArbiter, approve, winner, amount, setApprove, s
   const showAddJoint = !info.approved && !isArbiter && !info.draw;
   const showApproveSwitch = showAddJoint && (!user || (!user.approvedIsValid && info.users.length > 1));
   const showApproveBtn = !info.draw && user && !user.approvedIsValid && info.users.length > 1;
-  const showWithdrawBtn = user && !user.refused; // mb not show if contract is yet approved but user already refused
+  const showWithdrawBtn = user && (!user.refused || !info.approved); 
   const incorrectAddr = winner != null && info.users.every(u => Address.normalize(u.address) != Address.normalize(winner));
   const withdrawDisabled = winner != undefined && (!winner || incorrectAddr);
   const showAward = isArbiter && info.approved && !info.draw;

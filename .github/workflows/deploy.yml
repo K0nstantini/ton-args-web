@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  VITE_MAIN_CONTRACT: 'EQCnHIz2CLStgBMvYlQSqtHrjVAx9SGRdxt-EjDAF0DMhhiq'
+  VITE_MAIN_CONTRACT: 'EQDGvto7S_4balviwR0RWpRghbNlCyGIAW4c85rGmRqyAf65'
   VITE_NET: 'testnet'
 
 permissions:
