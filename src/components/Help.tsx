@@ -84,7 +84,7 @@ export function Help({ close }: Props) {
         <List>
           {typicalDeal.map((row, key) => (
             <ListItem key={key} disablePadding>
-              <Typography variant="body1"> {`${key + 1}. ${row}.`} </Typography>
+              <Typography variant="body1"> <span style={{ fontWeight: '500' }}>{key + 1}.</span> {row}. </Typography>
             </ListItem>
           ))}
         </List>
@@ -97,7 +97,7 @@ export function Help({ close }: Props) {
         <List>
           {settings.map((row, key) => (
             <ListItem key={key} disablePadding>
-              <Typography variant="body1"> {`${key + 1}. ${row}.`} </Typography>
+              <Typography variant="body1"> {'‣ ' + row} </Typography>
             </ListItem>
           ))}
         </List>
