@@ -107,14 +107,14 @@ export function AppAppBar() {
                   />
                 </a>
               </IconButton>
-              <IconButton    onClick={() => { }}>
-                  <img
-                    src={
-                      'https://K0nstantini.github.io/ton-args-web/quesion-mark.svg'
-                    }
-                    style={{ width: '30px', cursor: 'pointer' }}
-                    alt="Question"
-                  />
+              <IconButton style={{ display: 'flex', alignItems: 'center' }} onClick={() => { }}>
+                <img
+                  src={
+                    'https://K0nstantini.github.io/ton-args-web/question-mark.svg'
+                  }
+                  style={{ width: '30px', cursor: 'pointer' }}
+                  alt="Question"
+                />
               </IconButton>
             </Box>
           </Box>
