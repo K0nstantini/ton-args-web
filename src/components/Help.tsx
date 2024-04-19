@@ -33,6 +33,12 @@ export function Help({ close }: Props) {
     "The deal, confirmed by all participants, awaits the decision of the arbiter, who can determine a winner or declare a draw",
   ];
 
+  const settings = [
+    "Contract fee: 0.5%",
+    "Transaction gas: 0.1 TON",
+    "Minimal bet sum: 0.01 TON"
+  ];
+
   return (
     <Paper
       className={styles.paper}
@@ -40,38 +46,62 @@ export function Help({ close }: Props) {
       <div className={styles.close}>
         <CloseBtn onClick={close}></CloseBtn>
       </div>
-      <Typography variant="h6" sx={{ display: "flex", justifyContent: "center", color: "darkred" }}>
+      <Typography variant="h6" sx={{
+        display: "flex",
+        justifyContent: "center",
+        color: "darkred",
+        mt: { xs: '24px', md: '0px' }
+      }}>
         Attention! This is a testnet version
       </Typography>
 
-      <Typography variant="h6" gutterBottom>
-        Purpose
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        Concluding deals between two or more parties with the involvement of a deal guarantor.
-      </Typography>
+      <div>
+        <Typography variant="h6" gutterBottom>
+          Purpose
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Concluding deals between two or more parties with the involvement of a deal guarantor.
+        </Typography>
+      </div>
 
-      <Typography variant="h6" gutterBottom>
-        Capabilities and limitations
-      </Typography>
-      <List>
-        {capabilities.map((row, key) => (
-          <ListItem key={key} disablePadding>
-            <Typography variant="body1"> {'‣ ' + row} </Typography>
-          </ListItem>
-        ))}
-      </List>
+      <div>
+        <Typography variant="h6" gutterBottom>
+          Capabilities and limitations
+        </Typography>
+        <List>
+          {capabilities.map((row, key) => (
+            <ListItem key={key} disablePadding>
+              <Typography variant="body1"> {'‣ ' + row} </Typography>
+            </ListItem>
+          ))}
+        </List>
+      </div>
 
-      <Typography variant="h6" gutterBottom>
-        Typical process of creating a deal between two participants
-      </Typography>
-      <List>
-        {typicalDeal.map((row, key) => (
-          <ListItem key={key} disablePadding>
-            <Typography variant="body1"> {`${key + 1}. ${row}.`} </Typography>
-          </ListItem>
-        ))}
-      </List>
+      <div>
+        <Typography variant="h6" gutterBottom>
+          Typical process of creating a deal between two participants
+        </Typography>
+        <List>
+          {typicalDeal.map((row, key) => (
+            <ListItem key={key} disablePadding>
+              <Typography variant="body1"> {`${key + 1}. ${row}.`} </Typography>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+
+      <div>
+        <Typography variant="h6" gutterBottom>
+          Current contract settings (for testing)
+        </Typography>
+        <List>
+          {settings.map((row, key) => (
+            <ListItem key={key} disablePadding>
+              <Typography variant="body1"> {`${key + 1}. ${row}.`} </Typography>
+            </ListItem>
+          ))}
+        </List>
+      </div>
     </Paper>
 
   );

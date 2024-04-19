@@ -166,6 +166,13 @@ export function AppAppBar({ onHelpClick }: Props) {
                   onClick={() => window.open(sourceUrl, "_blank", "noreferrer")} >
                   Source
                 </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setOpenDrawer(false);
+                    onHelpClick();
+                  }} >
+                  Help
+                </MenuItem>
                 <Divider />
                 <MenuItem>
                   <Button
