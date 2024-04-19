@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Divider, Drawer, MenuItem, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Container, Divider, Drawer, IconButton, MenuItem, Toolbar } from "@mui/material";
 import { TonConnectButton, useTonConnectModal, useTonConnectUI } from "@tonconnect/ui-react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
@@ -71,37 +71,51 @@ export function AppAppBar() {
               display: 'flex',
               alignItems: 'center',
               ml: '-12px',
-              px: 0,
             }}
           >
             <Box sx={{ display: { xs: 'none', md: 'flex', gap: '16px' } }}>
-              <a href="https://t.me/TonArgsBot" target="_blank" rel="noopener noreferrer">
-                <img
-                  src={
-                    'https://K0nstantini.github.io/ton-args-web/telegram.svg'
-                  }
-                  style={{ width: '30px', cursor: 'pointer' }}
-                  alt="Telegram"
-                />
-              </a>
-              <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={
-                    'https://K0nstantini.github.io/ton-args-web/github.svg'
-                  }
-                  style={{ width: '30px', cursor: 'pointer' }}
-                  alt="Source"
-                />
-              </a>
-              <a href={contractUrl()} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={
-                    'https://K0nstantini.github.io/ton-args-web/tonscan.svg'
-                  }
-                  style={{ width: '30px', cursor: 'pointer' }}
-                  alt="Contract"
-                />
-              </a>
+              <IconButton>
+                <a href="https://t.me/TonArgsBot" target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={
+                      'https://K0nstantini.github.io/ton-args-web/telegram.svg'
+                    }
+                    style={{ width: '30px', cursor: 'pointer' }}
+                    alt="Telegram"
+                  />
+                </a>
+              </IconButton>
+              <IconButton>
+                <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={
+                      'https://K0nstantini.github.io/ton-args-web/github.svg'
+                    }
+                    style={{ width: '30px', cursor: 'pointer' }}
+                    alt="Source"
+                  />
+                </a>
+              </IconButton>
+              <IconButton>
+                <a href={contractUrl()} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={
+                      'https://K0nstantini.github.io/ton-args-web/tonscan.svg'
+                    }
+                    style={{ width: '30px', cursor: 'pointer' }}
+                    alt="Contract"
+                  />
+                </a>
+              </IconButton>
+              <IconButton    onClick={() => { }}>
+                  <img
+                    src={
+                      'https://K0nstantini.github.io/ton-args-web/quesion-mark.svg'
+                    }
+                    style={{ width: '30px', cursor: 'pointer' }}
+                    alt="Question"
+                  />
+              </IconButton>
             </Box>
           </Box>
           <Box
