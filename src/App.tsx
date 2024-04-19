@@ -8,48 +8,52 @@ import { ExistedDeal } from './components/ExistedDeal';
 import Deal, { DealInfo } from './contracts/deal';
 import { AppAppBar } from "./components/AppBar";
 import '@twa-dev/sdk';
+import { Help } from './components/Help';
+
+enum AppState {
+  Default,
+  NewDeal,
+  ExistedDeal,
+  Help
+};
 
 function App() {
-  const [newDeal, setNewDeal] = useState(false);
-  const [help, setHelp] = useState(false);
-  const [findDeal, setFindDeal] = useState<[OpenedContract<Deal>, DealInfo] | null>(null);
+  const [appState, setAppState] = useState(AppState.Default);
+  const [currentDeal, setCurrentDeal] = useState<[OpenedContract<Deal>, DealInfo] | null>(null);
 
   useEffect(() => {
-    if (newDeal) {
-      setFindDeal(null);
+    if (appState != AppState.ExistedDeal) {
+      setCurrentDeal(null);
     }
-  }, [newDeal]);
+  }, [appState]);
 
-  useEffect(() => {
-    if (findDeal) {
-      setNewDeal(false);
-    }
-  }, [findDeal]);
-
-  useEffect(() => {
-    if (findDeal) {
-      setNewDeal(false);
-    }
-  }, [newDeal, findDeal, help]);
+  const setExistedDeal = (contract: OpenedContract<Deal>, info: DealInfo) => {
+    setCurrentDeal([contract, info]);
+    setAppState(AppState.ExistedDeal);
+  };
 
   return (
     <div className="app">
-      <AppAppBar onHelpClick={() => setHelp(true)}/>
+      <AppAppBar onHelpClick={() => setAppState(AppState.Help)} />
       <Header />
       <div className="body">
-        <StartDeal
-          showNewDeal={!newDeal}
-          findDeal={(c, i) => setFindDeal([c, i])}
-          newDeal={() => setNewDeal(true)}
+        {appState != AppState.Help && <StartDeal
+          showNewDeal={appState != AppState.NewDeal}
+          findDeal={setExistedDeal}
+          newDeal={() => setAppState(AppState.NewDeal)}
         />
-        {newDeal && <NewDeal
-          close={() => setNewDeal(false)}
+        }
+        {appState == AppState.NewDeal && <NewDeal
+          close={() => setAppState(AppState.Default)}
         />}
-        {findDeal && <ExistedDeal
-          deal={findDeal[0]}
-          dealInfo={findDeal[1]}
-          close={() => setFindDeal(null)}
+        {appState == AppState.ExistedDeal && currentDeal && <ExistedDeal
+          deal={currentDeal[0]}
+          dealInfo={currentDeal[1]}
+          close={() => setAppState(AppState.Default)}
         />}
+        {appState == AppState.Help && <Help
+          close={() => setAppState(AppState.Default)} />
+        }
       </div>
     </div>
   );

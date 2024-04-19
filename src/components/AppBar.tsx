@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Divider, Drawer, IconButton, MenuItem, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Container, Divider, Drawer, IconButton, MenuItem, Toolbar, Typography } from "@mui/material";
 import { TonConnectButton, useTonConnectModal, useTonConnectUI } from "@tonconnect/ui-react";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
@@ -111,15 +111,11 @@ export function AppAppBar({ onHelpClick }: Props) {
                   />
                 </a>
               </IconButton>
-              <IconButton style={{ display: 'flex', alignItems: 'center' }} onClick={onHelpClick}>
-                <img
-                  src={
-                    'https://K0nstantini.github.io/ton-args-web/help.svg'
-                  }
-                  style={{ width: '30px', cursor: 'pointer' }}
-                  alt="Question"
-                />
-              </IconButton>
+              <MenuItem sx={{ py: '6px', px: '12px' }} onClick={onHelpClick}>
+                <Typography variant="body2" color="text.primary">
+                  Help
+                </Typography>
+              </MenuItem>
             </Box>
           </Box>
           <Box

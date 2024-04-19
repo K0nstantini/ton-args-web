@@ -1,0 +1,30 @@
+.paper {
+  position: relative;
+  margin: 16px;
+  padding: 16px;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* margin-top: 16px; */
+  /* gap: 16px; */
+  /* margin-left: 16px; */
+  /* margin-right: 16px; */
+}
+
+/* @media (min-width: 750px) { */
+/*   .paper { */
+/*     width: 750px; */
+/*   } */
+/* } */
+/**/
+/* @media (max-width: 750px) { */
+/*   .paper { */
+/*     width: 92%; */
+/*   } */
+/* } */
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: fit-content;
+}
