@@ -11,6 +11,7 @@ import '@twa-dev/sdk';
 
 function App() {
   const [newDeal, setNewDeal] = useState(false);
+  const [help, setHelp] = useState(false);
   const [findDeal, setFindDeal] = useState<[OpenedContract<Deal>, DealInfo] | null>(null);
 
   useEffect(() => {
@@ -25,9 +26,15 @@ function App() {
     }
   }, [findDeal]);
 
+  useEffect(() => {
+    if (findDeal) {
+      setNewDeal(false);
+    }
+  }, [newDeal, findDeal, help]);
+
   return (
     <div className="app">
-      <AppAppBar />
+      <AppAppBar onHelpClick={() => setHelp(true)}/>
       <Header />
       <div className="body">
         <StartDeal

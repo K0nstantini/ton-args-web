@@ -4,7 +4,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import { useTonConnect } from "../hooks/useTonConnect";
 
-export function AppAppBar() {
+type Props = {
+  onHelpClick: () => void
+}
+
+export function AppAppBar({ onHelpClick }: Props) {
   const sourceUrl = "https://github.com/K0nstantini/ton-args/tree/main/contracts";
   const siteUrl = "https://k0nstantini.github.io/ton-args-web/";
   const contractUrl = () => {
@@ -107,10 +111,10 @@ export function AppAppBar() {
                   />
                 </a>
               </IconButton>
-              <IconButton style={{ display: 'flex', alignItems: 'center' }} onClick={() => { }}>
+              <IconButton style={{ display: 'flex', alignItems: 'center' }} onClick={onHelpClick}>
                 <img
                   src={
-                    'https://K0nstantini.github.io/ton-args-web/question-mark.svg'
+                    'https://K0nstantini.github.io/ton-args-web/help.svg'
                   }
                   style={{ width: '30px', cursor: 'pointer' }}
                   alt="Question"
